@@ -22,6 +22,7 @@ export default function Header() {
           <a href="#features" className="text-sm text-foreground/70 hover:text-foreground">Features</a>
           <a href="#coaching" className="text-sm text-foreground/70 hover:text-foreground">Coaching</a>
           <a href="#dashboard" className="text-sm text-foreground/70 hover:text-foreground">Dashboard</a>
+          <a href="#pricing" className="text-sm text-foreground/70 hover:text-foreground">Pricing</a>
           <NavLink to="/templates" className={navLinkClass}>Templates</NavLink>
         </nav>
         <div className="flex items-center gap-2">
