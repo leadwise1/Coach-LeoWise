@@ -129,17 +129,39 @@ export default function Index() {
 
   const ideas = useResumeGenerator(profile, job);
 
-  const onGenerate = () => {
-    setLoading(true);
-    setTimeout(() => {
+  const onGenerate = async () => {
+    try {
+      setLoading(true);
+      setGenerated(null);
+      const res = await fetch("/api/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ profile, job, temperature: 0.6, maxTokens: 512 }),
+      });
+      if (res.ok) {
+        const data = (await res.json()) as { provider?: string; text?: string };
+        if (data?.text) {
+          setGenerated(data.text);
+          return;
+        }
+      }
+      // Fallback to local generator
       const out = [
         `Professional Summary\n${ideas.summary}`,
         `Key Achievements\n• ${ideas.bullets.join("\n• ")}`,
         `Optimization Notes\n${ideas.tailored}`,
       ].join("\n\n");
       setGenerated(out);
+    } catch (e) {
+      const out = [
+        `Professional Summary\n${ideas.summary}`,
+        `Key Achievements\n• ${ideas.bullets.join("\n• ")}`,
+        `Optimization Notes\n${ideas.tailored}`,
+      ].join("\n\n");
+      setGenerated(out);
+    } finally {
       setLoading(false);
-    }, 400);
+    }
   };
 
   return (
@@ -226,7 +248,7 @@ export default function Index() {
               </div>
               <div className="flex flex-wrap items-center gap-3">
                 <Button onClick={onGenerate} disabled={loading} className={cn("", loading && "opacity-80")}>Generate Resume</Button>
-                <span className="text-sm text-muted-foreground">The content is generated locally for demo purposes.</span>
+                <span className="text-sm text-muted-foreground">Powered by Gemini with Grok fallback.</span>
               </div>
             </div>
             <div className="lg:col-span-1">
