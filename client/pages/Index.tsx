@@ -275,6 +275,55 @@ export default function Index() {
         </div>
       </section>
 
+      {/* Pricing */}
+      <section id="pricing" className="relative overflow-hidden py-20 sm:py-24">
+        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-white via-indigo-50/40 to-white" />
+        <div className="container">
+          <SectionTitle eyebrow="Pricing" title="Choose the plan that fits your journey" />
+          <div className="mt-12 grid gap-6 lg:grid-cols-3">
+            <PricingCard
+              title="Starter"
+              price="$0"
+              period="/mo"
+              cta="Start Free"
+              highlighted={false}
+              features={[
+                "AI content suggestions",
+                "ATS-friendly templates",
+                "PDF & Word export",
+              ]}
+            />
+            <PricingCard
+              title="Pro"
+              price="$19"
+              period="/mo"
+              cta="Start 14‑Day Trial"
+              highlighted
+              badge="Recommended"
+              features={[
+                "Cover letters & tailoring",
+                "Application tracking dashboard",
+                "Interview simulation (AI/VR)",
+                "Priority exports & sharing",
+              ]}
+            />
+            <PricingCard
+              title="Enterprise"
+              price="Custom"
+              period=""
+              cta="Contact Sales"
+              highlighted={false}
+              features={[
+                "SSO & advanced security",
+                "Team coaching & analytics",
+                "Custom templates & branding",
+                "Dedicated support",
+              ]}
+            />
+          </div>
+        </div>
+      </section>
+
       {/* Command Center */}
       <section id="dashboard" className="relative overflow-hidden py-20 sm:py-24">
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-indigo-50 via-white to-white" />
@@ -360,5 +409,53 @@ export default function Index() {
         </div>
       </section>
     </>
+  );
+}
+
+function PricingCard({ title, price, period, cta, features, highlighted = false, badge }: {
+  title: string;
+  price: string;
+  period: string;
+  cta: string;
+  features: string[];
+  highlighted?: boolean;
+  badge?: string;
+}) {
+  return (
+    <div className={cn(
+      "relative rounded-2xl border bg-card p-6 shadow-sm",
+      highlighted && "border-transparent p-[1px] bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600"
+    )}>
+      <div className={cn("rounded-2xl p-5", highlighted && "bg-white")}>
+        <div className="mb-4 flex items-center justify-between">
+          <div className="text-sm font-semibold">{title}</div>
+          {badge && (
+            <span className="rounded-full bg-indigo-100 px-2 py-0.5 text-xs font-medium text-indigo-700">{badge}</span>
+          )}
+        </div>
+        <div className="flex items-baseline gap-1">
+          <div className="text-4xl font-extrabold tracking-tight">{price}</div>
+          <div className="text-sm text-muted-foreground">{period}</div>
+        </div>
+        <ul className="mt-5 space-y-2 text-sm">
+          {features.map((f) => (
+            <li key={f} className="flex items-start gap-2">
+              <span className="mt-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 text-white">
+                ✓
+              </span>
+              <span>{f}</span>
+            </li>
+          ))}
+        </ul>
+        <div className="mt-6">
+          <Button className={cn(
+            "w-full",
+            highlighted && "bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 hover:from-indigo-500 hover:via-violet-500 hover:to-fuchsia-500"
+          )} variant={highlighted ? "default" : "outline"}>
+            {cta}
+          </Button>
+        </div>
+      </div>
+    </div>
   );
 }
