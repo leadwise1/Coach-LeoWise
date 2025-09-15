@@ -78,6 +78,49 @@ function useResumeGenerator(profile: string, job: string) {
   }, [profile, job]);
 }
 
+function TypingLine() {
+  const phrases = [
+    "Analyzing job description…",
+    "Drafting resume summary…",
+    "Optimizing ATS alignment…",
+    "Highlighting quantifiable impact…",
+  ];
+  const [index, setIndex] = useState(0);
+  const [text, setText] = useState("");
+  const [deleting, setDeleting] = useState(false);
+
+  useMemo(() => {
+    let timer: number;
+    const tick = () => {
+      const current = phrases[index % phrases.length];
+      const step = deleting ? -1 : 1;
+      const next = current.slice(0, text.length + step);
+      setText(next);
+      const atEnd = next === current;
+      const atStart = next.length === 0;
+      let delay = deleting ? 40 : 60;
+      if (atEnd && !deleting) {
+        delay = 900;
+        setDeleting(true);
+      } else if (atStart && deleting) {
+        delay = 350;
+        setDeleting(false);
+        setIndex((i) => (i + 1) % phrases.length);
+      }
+      timer = window.setTimeout(tick, delay);
+    };
+    timer = window.setTimeout(tick, 400);
+    return () => window.clearTimeout(timer);
+  }, [index, text, deleting]);
+
+  return (
+    <div className="mt-6 inline-flex items-center gap-2 rounded-full bg-muted px-3 py-1.5 text-xs font-medium text-foreground/80">
+      <span className="inline-flex h-2 w-2 animate-pulse rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600" />
+      <span className="font-mono">{text}</span>
+    </div>
+  );
+}
+
 export default function Index() {
   const [profile, setProfile] = useState("");
   const [job, setJob] = useState("");
