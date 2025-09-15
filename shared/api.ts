@@ -10,3 +10,15 @@
 export interface DemoResponse {
   message: string;
 }
+
+export interface GenerateRequest {
+  profile: string;
+  job: string;
+  temperature?: number;
+  maxTokens?: number;
+}
+
+export interface GenerateResponse {
+  provider: "gemini" | "grok";
+  text: string;
+}
