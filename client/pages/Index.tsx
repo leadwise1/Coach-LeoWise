@@ -104,13 +104,13 @@ export default function Index() {
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-indigo-50 via-white to-white" />
         <div className="container py-20 sm:py-28">
-          <div className="grid items-center gap-10 lg:grid-cols-2">
-            <div>
+          <div className="grid items-center gap-12 lg:grid-cols-2">
+            <div className="max-w-xl justify-self-start">
               <div className="inline-flex items-center gap-2 rounded-full border bg-white/60 px-3 py-1 text-xs text-foreground/70 backdrop-blur">
                 <Sparkles className="h-4 w-4 text-indigo-600" />
                 Build Your Career Foundation with AI-Powered Resumes
               </div>
-              <h1 className="mt-4 text-4xl font-extrabold tracking-tight sm:text-5xl">
+              <h1 className="mt-4 text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
                 LeadWise Foundation empowers job seekers with professional, ATS-friendly resumes.
               </h1>
               <p className="mt-4 text-lg text-muted-foreground">
@@ -122,6 +122,7 @@ export default function Index() {
                 </Button>
                 <Button size="lg" variant="outline">View Templates</Button>
               </div>
+              <TypingLine />
               <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <Feature icon={Brain} title="AI Content Generation" desc="Get personalized suggestions for every section of your resume" />
                 <Feature icon={FileText} title="Professional Templates" desc="Choose from modern, ATS-friendly templates designed by experts" />
@@ -129,38 +130,7 @@ export default function Index() {
               </div>
             </div>
             <div className="relative">
-              <div className="mx-auto max-w-md rounded-2xl border bg-white p-6 shadow-xl">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-semibold">Career Intelligence Dashboard</h3>
-                  <Badge className="bg-indigo-100 text-indigo-700 hover:bg-indigo-100">Preview</Badge>
-                </div>
-                <div className="mt-6 space-y-6">
-                  <Progress value={75} />
-                  <div className="grid grid-cols-3 gap-3 text-center">
-                    <div className="rounded-lg border p-3">
-                      <div className="text-2xl font-bold">12</div>
-                      <div className="text-xs text-muted-foreground">Applications Sent</div>
-                    </div>
-                    <div className="rounded-lg border p-3">
-                      <div className="text-2xl font-bold">4</div>
-                      <div className="text-xs text-muted-foreground">Interviews</div>
-                    </div>
-                    <div className="rounded-lg border p-3">
-                      <div className="text-2xl font-bold">3</div>
-                      <div className="text-xs text-muted-foreground">Offers in Review</div>
-                    </div>
-                  </div>
-                  <div>
-                    <div className="text-sm font-semibold">Next Actions</div>
-                    <ul className="mt-2 space-y-2 text-sm">
-                      <li className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-emerald-500" /> Follow up with TechCorp</li>
-                      <li className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-amber-500" /> Complete Python certification</li>
-                      <li className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-sky-500" /> Practice system design questions</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div className="pointer-events-none absolute -right-8 -top-8 -z-10 hidden h-64 w-64 rounded-full bg-indigo-200/50 blur-3xl sm:block" />
+              <AICoach />
             </div>
           </div>
         </div>
