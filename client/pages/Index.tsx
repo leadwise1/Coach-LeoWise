@@ -89,7 +89,7 @@ function TypingLine() {
   const [text, setText] = useState("");
   const [deleting, setDeleting] = useState(false);
 
-  useMemo(() => {
+  useEffect(() => {
     let timer: number;
     const tick = () => {
       const current = phrases[index % phrases.length];
