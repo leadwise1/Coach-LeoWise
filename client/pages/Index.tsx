@@ -1,62 +1,329 @@
-import { DemoResponse } from "@shared/api";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import {
+  Brain,
+  FileText,
+  Download,
+  Sparkles,
+  BookOpenCheck,
+  Target,
+  BarChart3,
+  Layers,
+  ShieldCheck,
+  CalendarClock,
+  CheckCircle2,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+
+function SectionTitle({ eyebrow, title, subtitle }: { eyebrow?: string; title: string; subtitle?: string }) {
+  return (
+    <div className="mx-auto max-w-3xl text-center">
+      {eyebrow && (
+        <div className="mb-3 inline-flex items-center rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700 ring-1 ring-inset ring-indigo-200">
+          {eyebrow}
+        </div>
+      )}
+      <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">{title}</h2>
+      {subtitle && <p className="mt-4 text-muted-foreground">{subtitle}</p>}
+    </div>
+  );
+}
+
+function Feature({ icon: Icon, title, desc }: { icon: any; title: string; desc: string }) {
+  return (
+    <div className="rounded-xl border bg-card p-6 shadow-sm">
+      <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 via-violet-500 to-fuchsia-500 text-white">
+        <Icon className="h-5 w-5" />
+      </div>
+      <h3 className="text-base font-semibold">{title}</h3>
+      <p className="mt-2 text-sm text-muted-foreground">{desc}</p>
+    </div>
+  );
+}
+
+function Progress({ value }: { value: number }) {
+  return (
+    <div className="w-full">
+      <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
+        <div className="h-full bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600" style={{ width: `${Math.max(0, Math.min(100, value))}%` }} />
+      </div>
+      <div className="mt-2 text-xs text-muted-foreground">Career Progress {value}%</div>
+    </div>
+  );
+}
+
+function useResumeGenerator(profile: string, job: string) {
+  return useMemo(() => {
+    const skills = Array.from(new Set((profile + " " + job).match(/\b[A-Za-z+#.]{2,}\b/g) || []))
+      .slice(0, 12)
+      .map((s) => s.replace(/[^A-Za-z+#.]/g, ""))
+      .filter(Boolean);
+
+    const tone = job.toLowerCase().includes("senior") ? "senior-level" : job.toLowerCase().includes("manager") ? "leadership" : "results-driven";
+
+    const summary = `Results-oriented ${tone} professional with strengths in ${skills.slice(0, 3).join(", ")}. Proven ability to deliver measurable impact by aligning initiatives to business goals and communicating clearly with stakeholders.`;
+
+    const bullets = [
+      `Transformed requirements into outcomes by leveraging ${skills.slice(0, 2).join(" and ")} to drive measurable impact.`,
+      `Partnered with cross-functional teams to deliver end-to-end solutions with a focus on reliability, performance, and user value.`,
+      `Continuously improved processes using data-informed decisions, automation, and high-quality documentation.`,
+    ];
+
+    const tailored = `Tailored for this role: emphasize ${skills.slice(0, 2).join(" & ")}, quantify outcomes (e.g., +25% efficiency, -30% costs), and mirror the job description's language for ATS alignment.`;
+
+    return { summary, bullets, tailored };
+  }, [profile, job]);
+}
 
 export default function Index() {
-  const [exampleFromServer, setExampleFromServer] = useState("");
-  // Fetch users on component mount
-  useEffect(() => {
-    fetchDemo();
-  }, []);
+  const [profile, setProfile] = useState("");
+  const [job, setJob] = useState("");
+  const [generated, setGenerated] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  // Example of how to fetch data from the server (if needed)
-  const fetchDemo = async () => {
-    try {
-      const response = await fetch("/api/demo");
-      const data = (await response.json()) as DemoResponse;
-      setExampleFromServer(data.message);
-    } catch (error) {
-      console.error("Error fetching hello:", error);
-    }
+  const ideas = useResumeGenerator(profile, job);
+
+  const onGenerate = () => {
+    setLoading(true);
+    setTimeout(() => {
+      const out = [
+        `Professional Summary\n${ideas.summary}`,
+        `Key Achievements\n• ${ideas.bullets.join("\n• ")}`,
+        `Optimization Notes\n${ideas.tailored}`,
+      ].join("\n\n");
+      setGenerated(out);
+      setLoading(false);
+    }, 400);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200">
-      <div className="text-center">
-        {/* TODO: FUSION_GENERATION_APP_PLACEHOLDER replace everything here with the actual app! */}
-        <h1 className="text-2xl font-semibold text-slate-800 flex items-center justify-center gap-3">
-          <svg
-            className="animate-spin h-8 w-8 text-slate-400"
-            viewBox="0 0 50 50"
-          >
-            <circle
-              className="opacity-30"
-              cx="25"
-              cy="25"
-              r="20"
-              stroke="currentColor"
-              strokeWidth="5"
-              fill="none"
-            />
-            <circle
-              className="text-slate-600"
-              cx="25"
-              cy="25"
-              r="20"
-              stroke="currentColor"
-              strokeWidth="5"
-              fill="none"
-              strokeDasharray="100"
-              strokeDashoffset="75"
-            />
-          </svg>
-          Generating your app...
-        </h1>
-        <p className="mt-4 text-slate-600 max-w-md">
-          Watch the chat on the left for updates that might need your attention
-          to finish generating
-        </p>
-        <p className="mt-4 hidden max-w-md">{exampleFromServer}</p>
-      </div>
-    </div>
+    <>
+      {/* Hero */}
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-indigo-50 via-white to-white" />
+        <div className="container py-20 sm:py-28">
+          <div className="grid items-center gap-10 lg:grid-cols-2">
+            <div>
+              <div className="inline-flex items-center gap-2 rounded-full border bg-white/60 px-3 py-1 text-xs text-foreground/70 backdrop-blur">
+                <Sparkles className="h-4 w-4 text-indigo-600" />
+                Build Your Career Foundation with AI-Powered Resumes
+              </div>
+              <h1 className="mt-4 text-4xl font-extrabold tracking-tight sm:text-5xl">
+                LeadWise Foundation empowers job seekers with professional, ATS-friendly resumes.
+              </h1>
+              <p className="mt-4 text-lg text-muted-foreground">
+                Our AI-powered platform helps you craft compelling content that showcases your potential and opens doors to new opportunities.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Button size="lg" className="bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 hover:from-indigo-500 hover:via-violet-500 hover:to-fuchsia-500">
+                  Start Building Resume
+                </Button>
+                <Button size="lg" variant="outline">View Templates</Button>
+              </div>
+              <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
+                <Feature icon={Brain} title="AI Content Generation" desc="Get personalized suggestions for every section of your resume" />
+                <Feature icon={FileText} title="Professional Templates" desc="Choose from modern, ATS-friendly templates designed by experts" />
+                <Feature icon={Download} title="Instant Export" desc="Download your resume as PDF or Word document in seconds" />
+              </div>
+            </div>
+            <div className="relative">
+              <div className="mx-auto max-w-md rounded-2xl border bg-white p-6 shadow-xl">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-semibold">Career Intelligence Dashboard</h3>
+                  <Badge className="bg-indigo-100 text-indigo-700 hover:bg-indigo-100">Preview</Badge>
+                </div>
+                <div className="mt-6 space-y-6">
+                  <Progress value={75} />
+                  <div className="grid grid-cols-3 gap-3 text-center">
+                    <div className="rounded-lg border p-3">
+                      <div className="text-2xl font-bold">12</div>
+                      <div className="text-xs text-muted-foreground">Applications Sent</div>
+                    </div>
+                    <div className="rounded-lg border p-3">
+                      <div className="text-2xl font-bold">4</div>
+                      <div className="text-xs text-muted-foreground">Interviews</div>
+                    </div>
+                    <div className="rounded-lg border p-3">
+                      <div className="text-2xl font-bold">3</div>
+                      <div className="text-xs text-muted-foreground">Offers in Review</div>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-sm font-semibold">Next Actions</div>
+                    <ul className="mt-2 space-y-2 text-sm">
+                      <li className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-emerald-500" /> Follow up with TechCorp</li>
+                      <li className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-amber-500" /> Complete Python certification</li>
+                      <li className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-sky-500" /> Practice system design questions</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div className="pointer-events-none absolute -right-8 -top-8 -z-10 hidden h-64 w-64 rounded-full bg-indigo-200/50 blur-3xl sm:block" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Hyper-Personalized */}
+      <section id="features" className="container py-20 sm:py-24">
+        <SectionTitle
+          eyebrow="Hyper-Personalized Resume & Cover Letters"
+          title="Our AI crafts compelling narratives that showcase your unique value"
+        />
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <Feature icon={BookOpenCheck} title="Narrative Storytelling" desc="Transform your experience into compelling stories that resonate with hiring managers" />
+          <Feature icon={BarChart3} title="Quantifiable Achievements" desc="AI coaching to identify and articulate measurable impact in your roles" />
+          <Feature icon={Layers} title="Industry Customization" desc="Tailored content that speaks the language of your target industry and role" />
+          <Feature icon={ShieldCheck} title="Bias Detection" desc="Advanced algorithms ensure your applications are free from unconscious bias" />
+          <Feature icon={Target} title="ATS Alignment" desc="Mirror job language to increase compatibility with applicant tracking systems" />
+          <Feature icon={CalendarClock} title="Faster Applications" desc="Accelerate your job search with reusable sections and smart autofill" />
+        </div>
+      </section>
+
+      {/* See the AI in Action */}
+      <section className="relative overflow-hidden border-y bg-gradient-to-b from-white to-indigo-50/40 py-20 sm:py-24">
+        <div className="container">
+          <SectionTitle
+            eyebrow="See the AI in Action"
+            title="Generate a personalized resume snippet"
+            subtitle="Enter a job description and your profile information."
+          />
+          <div className="mt-10 grid gap-6 lg:grid-cols-3">
+            <div className="lg:col-span-2 space-y-4">
+              <div>
+                <label className="mb-1 block text-sm font-medium">Your Profile / Experience</label>
+                <Textarea
+                  placeholder="Paste your current resume summary or a brief description of your experience..."
+                  value={profile}
+                  onChange={(e) => setProfile(e.target.value)}
+                  className="min-h-[140px]"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium">Job Description</label>
+                <Textarea
+                  placeholder="Paste the job description you are targeting..."
+                  value={job}
+                  onChange={(e) => setJob(e.target.value)}
+                  className="min-h-[140px]"
+                />
+              </div>
+              <div className="flex flex-wrap items-center gap-3">
+                <Button onClick={onGenerate} disabled={loading} className={cn("", loading && "opacity-80")}>Generate Resume</Button>
+                <span className="text-sm text-muted-foreground">The content is generated locally for demo purposes.</span>
+              </div>
+            </div>
+            <div className="lg:col-span-1">
+              <div className="h-full rounded-xl border bg-card p-4">
+                <div className="text-sm font-semibold">Generated Result</div>
+                <pre className="mt-3 h-[360px] w-full overflow-auto rounded-md bg-muted/40 p-3 text-xs leading-6">{generated || "Your personalized resume will appear here..."}</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Coaching */}
+      <section id="coaching" className="container py-20 sm:py-24">
+        <SectionTitle
+          eyebrow="Proactive Career Coaching"
+          title="Get ahead with predictive insights and end-to-end management"
+        />
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <Feature icon={Target} title="Predictive Career Pathing" desc="AI analyzes market trends to suggest optimal career moves and skills" />
+          <Feature icon={CalendarClock} title="Application Management" desc="Track applications, follow-ups, and interviews in one dashboard" />
+          <Feature icon={Brain} title="Skill Mapping & Learning" desc="Personalized learning roadmaps based on goals and market demand" />
+          <Feature icon={Sparkles} title="AI/VR Interview Simulation" desc="Practice with realistic scenarios and get instant feedback" />
+        </div>
+      </section>
+
+      {/* Command Center */}
+      <section id="dashboard" className="relative overflow-hidden py-20 sm:py-24">
+        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-indigo-50 via-white to-white" />
+        <div className="container">
+          <SectionTitle
+            eyebrow="Your Career Command Center"
+            title="Track progress, manage applications, and accelerate skills"
+          />
+          <div className="mt-12 grid gap-6 lg:grid-cols-3">
+            <div className="lg:col-span-2 space-y-6">
+              <div className="rounded-xl border bg-card p-6">
+                <div className="mb-4 flex items-center justify-between">
+                  <div className="text-sm font-semibold">Overview</div>
+                  <Badge variant="secondary">Live</Badge>
+                </div>
+                <div className="grid gap-6 md:grid-cols-3">
+                  <div className="rounded-lg border p-4">
+                    <div className="text-sm text-muted-foreground">Applications</div>
+                    <div className="mt-2 text-2xl font-bold">12</div>
+                  </div>
+                  <div className="rounded-lg border p-4">
+                    <div className="text-sm text-muted-foreground">Skills</div>
+                    <div className="mt-2 text-2xl font-bold">8 tracking</div>
+                  </div>
+                  <div className="rounded-lg border p-4">
+                    <div className="text-sm text-muted-foreground">Interviews</div>
+                    <div className="mt-2 text-2xl font-bold">4 scheduled</div>
+                  </div>
+                </div>
+              </div>
+              <div className="rounded-xl border bg-card p-6">
+                <div className="mb-4 text-sm font-semibold">Recent Activity</div>
+                <ul className="space-y-3 text-sm">
+                  <li className="flex items-center justify-between"><span>Applied to Senior Developer at TechCorp</span><span className="text-muted-foreground">2 hours ago</span></li>
+                  <li className="flex items-center justify-between"><span>Completed React Advanced Course</span><span className="text-muted-foreground">1 day ago</span></li>
+                </ul>
+              </div>
+            </div>
+            <div className="space-y-6">
+              <div className="rounded-xl border bg-card p-6">
+                <div className="mb-2 text-sm font-semibold">AI Recommendations</div>
+                <div className="rounded-lg border p-4">
+                  <div className="flex items-center justify-between text-sm font-medium">
+                    <span>Optimize LinkedIn Profile</span>
+                    <span className="rounded-full bg-amber-100 px-2 py-0.5 text-amber-700">high</span>
+                  </div>
+                  <p className="mt-1 text-sm text-muted-foreground">Add 3 key skills to increase visibility</p>
+                </div>
+              </div>
+              <div className="rounded-xl border bg-card p-6">
+                <div className="text-sm font-semibold">Next Actions</div>
+                <ul className="mt-2 space-y-2 text-sm">
+                  <li>Follow up with TechCorp</li>
+                  <li>Complete Python certification</li>
+                  <li>Practice system design questions</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section id="get-started" className="container py-20 sm:py-24">
+        <div className="mx-auto max-w-3xl overflow-hidden rounded-2xl border bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600 p-[1px] shadow-xl">
+          <div className="rounded-2xl bg-white p-8 text-center sm:p-12">
+            <h3 className="text-2xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600">
+              Ready to Transform Your Career?
+            </h3>
+            <p className="mt-3 text-muted-foreground">
+              Join thousands of professionals who have accelerated their careers with AI-powered insights and personalized coaching.
+            </p>
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+              <Button size="lg" className="bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 hover:from-indigo-500 hover:via-violet-500 hover:to-fuchsia-500">Start Free Trial</Button>
+              <Button size="lg" variant="outline">Book Demo</Button>
+            </div>
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-2 text-xs">
+              <Badge variant="secondary">14-Day Free Trial</Badge>
+              <Badge variant="secondary">Privacy Protected</Badge>
+              <Badge variant="secondary">Expert Support 24/7</Badge>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
