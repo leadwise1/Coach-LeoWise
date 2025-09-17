@@ -176,6 +176,7 @@ export default function Index() {
         const data = (await res.json()) as { provider?: string; text?: string };
         if (data?.text) {
           setGenerated(data.text);
+          setProvider(data.provider || null);
           return;
         }
       }
