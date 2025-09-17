@@ -217,14 +217,11 @@ export default function Index() {
                 showcases your potential and opens doors to new opportunities.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
-                <Button
-                  size="lg"
-                  className="bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 hover:from-indigo-500 hover:via-violet-500 hover:to-fuchsia-500"
-                >
-                  Start Building Resume
+                <Button size="lg" asChild className="bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 hover:from-indigo-500 hover:via-violet-500 hover:to-fuchsia-500">
+                  <a href="#ai">Start Building Resume</a>
                 </Button>
-                <Button size="lg" variant="outline">
-                  View Templates
+                <Button size="lg" variant="outline" asChild>
+                  <a href="/templates">View Templates</a>
                 </Button>
               </div>
               <TypingLine />
@@ -294,7 +291,7 @@ export default function Index() {
       </section>
 
       {/* See the AI in Action */}
-      <section className="relative overflow-hidden border-y bg-gradient-to-b from-white to-indigo-50/40 py-20 sm:py-24">
+      <section id="ai" className="relative overflow-hidden border-y bg-gradient-to-b from-white to-indigo-50/40 py-20 sm:py-24">
         <div className="container">
           <SectionTitle
             eyebrow="See the AI in Action"
