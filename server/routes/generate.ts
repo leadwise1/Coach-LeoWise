@@ -5,7 +5,7 @@ const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-1.5-flash";
 const GROK_MODEL = process.env.GROK_MODEL || "grok-2-latest";
 
 async function callGemini(prompt: string, temperature: number, maxTokens: number) {
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
   if (!apiKey) throw new Error("Missing GEMINI_API_KEY");
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(
     GEMINI_MODEL,
@@ -38,7 +38,7 @@ async function callGemini(prompt: string, temperature: number, maxTokens: number
 }
 
 async function callGrok(prompt: string, temperature: number, maxTokens: number) {
-  const apiKey = process.env.GROK_API_KEY;
+  const apiKey = process.env.GROK_API_KEY || process.env.VITE_GROK_API_KEY;
   if (!apiKey) throw new Error("Missing GROK_API_KEY");
   const url = "https://api.x.ai/v1/chat/completions";
   const body = {
