@@ -187,6 +187,7 @@ export default function Index() {
         `Optimization Notes\n${ideas.tailored}`,
       ].join("\n\n");
       setGenerated(out);
+      setProvider("local");
     } catch (e) {
       const out = [
         `Professional Summary\n${ideas.summary}`,
