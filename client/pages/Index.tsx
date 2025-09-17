@@ -161,6 +161,7 @@ export default function Index() {
     try {
       setLoading(true);
       setGenerated(null);
+      setProvider(null);
       const res = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
