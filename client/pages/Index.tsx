@@ -169,7 +169,7 @@ export default function Index() {
           profile,
           job,
           temperature: 0.6,
-          maxTokens: 512,
+          maxTokens: 1200,
         }),
       });
       if (res.ok) {
