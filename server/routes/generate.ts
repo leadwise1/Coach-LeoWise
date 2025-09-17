@@ -93,7 +93,7 @@ export const handleGenerate: RequestHandler = async (req, res) => {
       return;
     }
 
-    const prompt = `Create a resume snippet tailored to the job. Return three sections in plain text:\n\nProfessional Summary: 2-3 sentences summarizing their strengths and fit.\nKey Achievements: 3 bullets, each with action + impact + quantifiable result.\nOptimization Notes: 1-2 lines explaining how to mirror JD keywords for ATS.\n\nPROFILE:\n${profile}\n\nJOB DESCRIPTION:\n${job}`;
+    const prompt = `Create a resume snippet tailored to the job. Return EXACTLY three sections in plain text (no markdown, no extra headers):\n\nProfessional Summary\n- 2-3 sentences summarizing strengths and fit.\n\nKey Achievements\n- 3 bullets. Each: action verb + skill + quantified impact (%, $, time).\n\nOptimization Notes\n- 1-2 lines on mirroring JD keywords for ATS.\n\nConstraints:\n- Do NOT echo placeholder tokens like 'Name', 'Jane', 'Doe', 'N/A'.\n- If profile lacks detail, infer plausible skills from the JOB DESCRIPTION.\n- Avoid repeating input verbatim or listing names.\n- Keep results concise, specific, and role-aligned.\n\nPROFILE:\n${profile}\n\nJOB DESCRIPTION:\n${job}`;
 
     try {
       const text = await callGemini(prompt, temperature, maxTokens);
