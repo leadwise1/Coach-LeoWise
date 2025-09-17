@@ -322,7 +322,10 @@ export default function Index() {
                   onChange={(e) => setProfile(e.target.value)}
                   className="min-h-[140px]"
                 />
-                <p className="mt-1 text-xs text-muted-foreground">Tip: add 2-4 sentences with skills and outcomes (min ~40 chars).</p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Tip: add 2-4 sentences with skills and outcomes (min ~40
+                  chars).
+                </p>
               </div>
               <div>
                 <label className="mb-1 block text-sm font-medium">
@@ -334,17 +337,25 @@ export default function Index() {
                   onChange={(e) => setJob(e.target.value)}
                   className="min-h-[140px]"
                 />
-                <p className="mt-1 text-xs text-muted-foreground">Include responsibilities and required skills (min ~60 chars).</p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Include responsibilities and required skills (min ~60 chars).
+                </p>
               </div>
               <div className="flex flex-wrap items-center gap-3">
                 <Button
                   onClick={onGenerate}
-                  disabled={loading || profile.trim().length < 40 || job.trim().length < 60}
+                  disabled={
+                    loading ||
+                    profile.trim().length < 40 ||
+                    job.trim().length < 60
+                  }
                   className={cn("", loading && "opacity-80")}
                 >
                   Generate Resume
                 </Button>
-                <span className="text-sm text-muted-foreground">Provider: {provider ?? "—"}</span>
+                <span className="text-sm text-muted-foreground">
+                  Provider: {provider ?? "—"}
+                </span>
               </div>
             </div>
             <div className="lg:col-span-1">
