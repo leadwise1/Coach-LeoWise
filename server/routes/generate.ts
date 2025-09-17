@@ -4,7 +4,11 @@ import type { GenerateRequest, GenerateResponse } from "@shared/api";
 const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-1.5-flash";
 const GROK_MODEL = process.env.GROK_MODEL || "grok-2-latest";
 
-async function callGemini(prompt: string, temperature: number, maxTokens: number) {
+async function callGemini(
+  prompt: string,
+  temperature: number,
+  maxTokens: number,
+) {
   const apiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
   if (!apiKey) throw new Error("Missing GEMINI_API_KEY");
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(
@@ -37,14 +41,22 @@ async function callGemini(prompt: string, temperature: number, maxTokens: number
   return text as string;
 }
 
-async function callGrok(prompt: string, temperature: number, maxTokens: number) {
+async function callGrok(
+  prompt: string,
+  temperature: number,
+  maxTokens: number,
+) {
   const apiKey = process.env.GROK_API_KEY || process.env.VITE_GROK_API_KEY;
   if (!apiKey) throw new Error("Missing GROK_API_KEY");
   const url = "https://api.x.ai/v1/chat/completions";
   const body = {
     model: GROK_MODEL,
     messages: [
-      { role: "system", content: "You are an expert resume and career coach. Be concise, specific, and quantifiable." },
+      {
+        role: "system",
+        content:
+          "You are an expert resume and career coach. Be concise, specific, and quantifiable.",
+      },
       { role: "user", content: prompt },
     ],
     temperature,
@@ -70,7 +82,12 @@ async function callGrok(prompt: string, temperature: number, maxTokens: number) 
 
 export const handleGenerate: RequestHandler = async (req, res) => {
   try {
-    const { profile, job, temperature = 0.6, maxTokens = 512 } = req.body as GenerateRequest;
+    const {
+      profile,
+      job,
+      temperature = 0.6,
+      maxTokens = 512,
+    } = req.body as GenerateRequest;
     if (!profile || !job) {
       res.status(400).json({ error: "Missing profile or job" });
       return;
