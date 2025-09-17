@@ -152,6 +152,7 @@ export default function Index() {
   const [profile, setProfile] = useState("");
   const [job, setJob] = useState("");
   const [generated, setGenerated] = useState<string | null>(null);
+  const [provider, setProvider] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const ideas = useResumeGenerator(profile, job);
