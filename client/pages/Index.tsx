@@ -337,14 +337,12 @@ export default function Index() {
               <div className="flex flex-wrap items-center gap-3">
                 <Button
                   onClick={onGenerate}
-                  disabled={loading}
+                  disabled={loading || profile.trim().length < 40 || job.trim().length < 60}
                   className={cn("", loading && "opacity-80")}
                 >
                   Generate Resume
                 </Button>
-                <span className="text-sm text-muted-foreground">
-                  Powered by Gemini with Grok fallback.
-                </span>
+                <span className="text-sm text-muted-foreground">Provider: {provider ?? "—"}</span>
               </div>
             </div>
             <div className="lg:col-span-1">
