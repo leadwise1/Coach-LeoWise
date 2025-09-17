@@ -195,6 +195,7 @@ export default function Index() {
         `Optimization Notes\n${ideas.tailored}`,
       ].join("\n\n");
       setGenerated(out);
+      setProvider("local");
     } finally {
       setLoading(false);
     }
