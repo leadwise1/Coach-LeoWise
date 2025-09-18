@@ -11,6 +11,7 @@ import NotFound from "./pages/NotFound";
 import Layout from "./components/site/Layout";
 import Templates from "./pages/Templates";
 import Placeholder from "./pages/Placeholder";
+import ResumeBuilder from "./pages/ResumeBuilder";
 
 const queryClient = new QueryClient();
 
