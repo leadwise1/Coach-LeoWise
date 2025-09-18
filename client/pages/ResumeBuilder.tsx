@@ -64,8 +64,7 @@ function useTemplateTheme(id: string | null) {
 
 export default function ResumeBuilder() {
   const [templateId, setTemplateId] = useState<string | null>(null);
-  const [raw, setRaw] = useState<string>("
-");
+  const [raw, setRaw] = useState<string>("");
 
   useEffect(() => {
     setTemplateId(localStorage.getItem("resume_template_id"));
