@@ -10,6 +10,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Layout from "./components/site/Layout";
 import Templates from "./pages/Templates";
+import Placeholder from "./pages/Placeholder";
 
 const queryClient = new QueryClient();
 
