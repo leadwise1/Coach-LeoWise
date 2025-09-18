@@ -25,6 +25,7 @@ const App = () => (
           <Route element={<Layout />}>
             <Route path="/" element={<Index />} />
             <Route path="/templates" element={<Templates />} />
+            <Route path="/resume" element={<ResumeBuilder />} />
             <Route
               path="/dashboard"
               element={<Placeholder title="Dashboard" />}
