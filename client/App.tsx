@@ -9,7 +9,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Layout from "./components/site/Layout";
-import Placeholder from "./pages/Placeholder";
+import Templates from "./pages/Templates";
 
 const queryClient = new QueryClient();
 
