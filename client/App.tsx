@@ -22,7 +22,7 @@ const App = () => (
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<Index />} />
-            <Route path="/templates" element={<Placeholder title="Templates" />} />
+            <Route path="/templates" element={<Templates />} />
             <Route path="/dashboard" element={<Placeholder title="Dashboard" />} />
           </Route>
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
