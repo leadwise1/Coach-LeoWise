@@ -6,8 +6,8 @@ export default function Footer() {
       <div className="container py-12 grid gap-10 md:grid-cols-4">
         <div className="space-y-4">
           <div className="flex items-center gap-2">
-            <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-gradient-to-br from-indigo-500 via-violet-500 to-fuchsia-500 text-white font-bold">CA</span>
-            <span className="text-lg font-extrabold tracking-tight">CareerAI</span>
+            <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-gradient-to-br from-indigo-500 via-violet-500 to-fuchsia-500 text-white font-bold">LW</span>
+            <span className="text-lg font-extrabold tracking-tight">LeadWise Foundation</span>
           </div>
           <p className="text-sm text-muted-foreground max-w-xs">
             Empowering careers with artificial intelligence and personalized coaching.
@@ -42,7 +42,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="border-t py-6 text-center text-xs text-muted-foreground">
-        © 2024 CareerAI. All rights reserved.
+        © 2024 LeadWise Foundation. All rights reserved.
       </div>
     </footer>
   );
