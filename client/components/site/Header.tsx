@@ -20,7 +20,10 @@ export default function Header() {
             LeadWise Foundation
           </span>
         </Link>
-        <nav className="hidden md:flex items-center gap-6">
+        <nav
+          aria-label="Primary Navigation"
+          className="hidden md:flex items-center gap-6"
+        >
           <a
             href="#features"
             className="text-sm text-foreground/70 hover:text-foreground"

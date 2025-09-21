@@ -1,42 +1,25 @@
-import "./global.css";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { Toaster } from "@/components/ui/toaster";
-import { createRoot } from "react-dom/client";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
-import NotFound from "./pages/NotFound";
-import Layout from "./components/site/Layout";
-import Templates from "./pages/Templates";
-import Placeholder from "./pages/Placeholder";
-import ResumeBuilder from "./pages/ResumeBuilder";
+const Index = () => {
+  const navigate = useNavigate();
 
-const queryClient = new QueryClient();
+  const handleGenerateResume = () => {
+    navigate('/resume');
+  };
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route element={<Layout />}>
-            <Route path="/" element={<Index />} />
-            <Route path="/templates" element={<Templates />} />
-            <Route path="/resume" element={<ResumeBuilder />} />
-            <Route
-              path="/dashboard"
-              element={<Placeholder title="Dashboard" />}
-            />
-          </Route>
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+  return (
+    <div className="container py-20">
+      <h1 className="text-4xl font-bold mb-8">Welcome to Coach-LeoWise</h1>
+      <p className="text-lg mb-8">Create an AI-powered, ATS-optimized resume in minutes.</p>
+      <button
+        onClick={handleGenerateResume}
+        className="px-8 py-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+      >
+        Generate My Resume
+      </button>
+    </div>
+  );
+};
 
-createRoot(document.getElementById("root")!).render(<App />);
+export default Index;

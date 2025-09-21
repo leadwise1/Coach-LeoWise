@@ -1,17 +1,23 @@
+
 [build]
-  command = "pnpm build"
-  functions = "netlify/functions"
+  # Directory to publish (must contain index.html)
   publish = "dist"
+  # Command to run the build
+  command = "pnpm build"
+  # Directory for Netlify serverless functions
+  functions = "netlify/functions"
 
 
 [functions]
+  # Use esbuild for bundling serverless functions
   node_bundler = "esbuild"
 
 [[redirects]]
-  force = true
+  # Redirect API calls to Netlify Functions
   from = "/api/*"
-  status = 200
   to = "/.netlify/functions/api/:splat"
+  status = 200
+  force = true
 
 # SPA fallback to support client-side routing
 [[redirects]]

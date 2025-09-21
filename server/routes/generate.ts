@@ -1,8 +1,7 @@
 import { RequestHandler } from "express";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// 1. Initialize the Gemini client
-// It automatically uses the GEMINI_API_KEY from your environment variables.
+// Initialize the Gemini client
 if (!process.env.GEMINI_API_KEY) {
   throw new Error("GEMINI_API_KEY environment variable not set.");
 }
@@ -10,19 +9,14 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 export const handleGenerate: RequestHandler = async (req, res) => {
   try {
-    // 2. Get user profile and job description from the frontend request
     const { profile, job } = req.body;
 
     if (!profile || !job) {
-      return res
-        .status(400)
-        .json({ error: "Profile and job description are required." });
+      return res.status(400).json({ error: "Profile and job description are required." });
     }
 
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
-    // 3. This is the most important part: Prompting the AI to function the right way.
-    // This detailed prompt instructs the AI on its role, the task, and the desired output format.
     const fullPrompt = `
       You are an expert career coach and resume writer named "Coach Leo".
       Your task is to generate a professional summary and key achievement bullet points for a resume.
@@ -50,11 +44,9 @@ export const handleGenerate: RequestHandler = async (req, res) => {
     const response = await result.response;
     const text = response.text();
 
-    // 4. Send the generated text back to the frontend in the expected format
     res.json({ text: text, provider: "gemini" });
   } catch (error) {
     console.error("Error calling Gemini API:", error);
-    // The frontend is designed to handle this error and use its fallback.
     res.status(500).json({ error: "Failed to generate response from AI." });
   }
 };

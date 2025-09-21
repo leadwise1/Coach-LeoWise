@@ -1,9 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { resumeService } from "@/services/ResumeService";
+import { ResumeData } from '@/types/resume';
 
+// Parse AI-generated resume text into structured sections
 function parseResume(text: string) {
-  const sections = {
+  const sections: Record<string, string> = {
     summary: "",
     experience: "",
     education: "",
@@ -13,7 +16,8 @@ function parseResume(text: string) {
     volunteering: "",
     extracurricular: "",
     notes: "",
-  } as Record<string, string>;
+  };
+
   const map: Record<string, keyof typeof sections> = {
     "professional summary": "summary",
     "work experience": "experience",
@@ -28,6 +32,7 @@ function parseResume(text: string) {
     "optimization notes": "notes",
     notes: "notes",
   };
+
   const lines = text.split(/\n+/);
   let current: keyof typeof sections | null = null;
   for (const raw of lines) {
@@ -42,32 +47,32 @@ function parseResume(text: string) {
       sections[current] += (sections[current] ? "\n" : "") + line;
     }
   }
+
   return sections;
 }
 
+// Hook to determine theme colors based on templateId
 function useTemplateTheme(id: string | null) {
   switch (id) {
-    case "option1":
-      return { accent: "from-zinc-800 to-zinc-600" };
-    case "option2":
-      return { accent: "from-indigo-500 to-fuchsia-500" };
-    case "option3":
-      return { accent: "from-amber-500 to-rose-500" };
-    case "option4":
-      return { accent: "from-red-500 to-slate-500" };
-    case "option5":
-      return { accent: "from-violet-600 to-purple-500" };
-    default:
-      return { accent: "from-indigo-600 to-fuchsia-600" };
+    case "option1": return { accent: "from-zinc-800 to-zinc-600" };
+    case "option2": return { accent: "from-indigo-500 to-fuchsia-500" };
+    case "option3": return { accent: "from-amber-500 to-rose-500" };
+    case "option4": return { accent: "from-red-500 to-slate-500" };
+    case "option5": return { accent: "from-violet-600 to-purple-500" };
+    default: return { accent: "from-indigo-600 to-fuchsia-600" };
   }
 }
 
 export default function ResumeBuilder() {
   const [templateId, setTemplateId] = useState<string | null>(null);
   const [raw, setRaw] = useState<string>("");
+  const [aiGenerated, setAiGenerated] = useState<string>("");
+  const [error, setError] = useState<string>("");
+  const [isGenerating, setIsGenerating] = useState<boolean>(false);
 
   useEffect(() => {
-    setTemplateId(localStorage.getItem("resume_template_id"));
+    const savedTemplate = localStorage.getItem("resume_template_id");
+    setTemplateId(savedTemplate);
     const saved = localStorage.getItem("resume_generated_text");
     if (saved) setRaw(saved);
   }, []);
@@ -75,14 +80,45 @@ export default function ResumeBuilder() {
   const sections = useMemo(() => parseResume(raw), [raw]);
   const theme = useTemplateTheme(templateId);
 
-  const onExportPDF = () => {
-    window.print();
+  const handleGenerate = async () => {
+    setError("");
+    setIsGenerating(true);
+
+    const resumeData: ResumeData = {
+      summary: sections.summary || undefined,
+      experience: sections.experience
+        ? sections.experience.split("\n").map(line => ({ description: line }))
+        : undefined,
+      education: sections.education
+        ? sections.education.split("\n").map(line => ({ degree: line }))
+        : undefined,
+      skills: sections.skills ? sections.skills.split("\n") : undefined,
+      projects: sections.projects ? sections.projects.split("\n") : undefined,
+      certifications: sections.certifications ? sections.certifications.split("\n") : undefined,
+      volunteering: sections.volunteering ? sections.volunteering.split("\n") : undefined,
+      extracurricular: sections.extracurricular ? sections.extracurricular.split("\n") : undefined,
+      notes: sections.notes || undefined,
+    };
+
+    try {
+      const generated = await resumeService.generateResume(resumeData, templateId || undefined);
+      setAiGenerated(generated.text);
+      setRaw(generated. text);
+      if (templateId) {
+        localStorage.setItem("resume_template_id", templateId);
+      }
+    } catch (err: any) {
+      setError(err?.message || "Failed to generate resume. Please try again.");
+      console.error("Failed to generate resume:", err);
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
+  const onExportPDF = () => { window.print(); };
+
   const onExportDoc = () => {
-    const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Resume</title></head><body>${
-      document.getElementById("resume-print-root")?.innerHTML || ""
-    }</body></html>`;
+    const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Resume</title></head><body>${document.getElementById("resume-print-root")?.innerHTML || ""}</body></html>`;
     const blob = new Blob([html], { type: "application/msword" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -98,16 +134,30 @@ export default function ResumeBuilder() {
         <div>
           <h1 className="text-2xl font-bold">Resume Builder</h1>
           <p className="mt-1 text-sm text-muted-foreground">Template: {templateId ?? "not selected"}</p>
+
           <div className="mt-4 space-y-3">
-            <label className="text-sm font-medium">Source Text</label>
-            <Textarea value={raw} onChange={(e) => setRaw(e.target.value)} className="min-h-[220px]" />
-            <p className="text-xs text-muted-foreground">Edit any text. We parse into sections on the right.</p>
+            <Button onClick={handleGenerate} disabled={isGenerating} aria-busy={isGenerating}>
+              {isGenerating ? "Generating..." : "Generate AI Resume"}
+            </Button>
+            {error && <p className="text-sm text-red-600">{error}</p>}
+
+            <label htmlFor="resume-text" className="text-sm font-medium">Source Text</label>
+            <Textarea
+              id="resume-text"
+              value={aiGenerated || raw}
+              onChange={(e) => { setRaw(e.target.value); setAiGenerated(""); setError(""); }}
+              className="min-h-[220px]"
+              aria-label="Edit resume text"
+            />
+            <p className="text-xs text-muted-foreground">Edit any text. We parse it into sections on the right.</p>
+
             <div className="flex gap-2 pt-2">
               <Button onClick={onExportPDF}>Export PDF</Button>
               <Button variant="outline" onClick={onExportDoc}>Export Word</Button>
             </div>
           </div>
         </div>
+
         <div>
           <div className="print:shadow-none overflow-hidden rounded-xl border bg-white shadow-sm">
             <div className={`h-3 w-full bg-gradient-to-r ${theme.accent}`} />

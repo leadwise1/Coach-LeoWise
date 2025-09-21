@@ -22,4 +22,4 @@ export function createServer() {
   app.post("/api/generate", handleGenerate);
 
   return app;
-}
+}0
