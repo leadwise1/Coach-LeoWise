@@ -24,13 +24,16 @@ export default defineConfig(({ command, mode }) => {
       react(),
       isDev && expressDevServer(),
     ],
+    build: {
+      outDir: 'dist/spa',
+    },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './client'),
         '@shared': path.resolve(__dirname, './shared'),
       },
     },
-    // Only set port when running locally, not for production build
+    // Explicitly set the entry point for the application
     server: isDev
       ? {
           port: 8080, // Local dev port
