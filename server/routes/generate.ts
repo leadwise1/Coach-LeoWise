@@ -1,52 +1,55 @@
 import { RequestHandler } from "express";
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
-// Initialize the Gemini client
-if (!process.env.GEMINI_API_KEY) {
-  throw new Error("GEMINI_API_KEY environment variable not set.");
-}
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 export const handleGenerate: RequestHandler = async (req, res) => {
-  try {
-    const { profile, job } = req.body;
+  // 1. Get the prompt from the frontend's request
+  const { prompt } = req.body;
 
-    if (!profile || !job) {
-      return res.status(400).json({ error: "Profile and job description are required." });
+  if (!prompt) {
+    return res.status(400).json({ error: "Missing prompt in request body." });
+  }
+
+  // 2. Get the secure API key from your Netlify environment variables
+  // This uses the key WITHOUT the "VITE_" prefix
+  const apiKey = process.env.GEMINI_API_KEY; 
+  if (!apiKey) {
+    console.error("GEMINI_API_KEY is not configured in Netlify environment variables.");
+    return res.status(500).json({ error: "API key is not configured on the server." });
+  }
+  
+  const model = 'gemini-1.5-flash-latest';
+  const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+
+  // 3. Construct the payload to send to the Gemini API
+  const payload = {
+    contents: [{ parts: [{ text: prompt }] }],
+  };
+
+  try {
+    // 4. Securely call the Gemini API from your server
+    const geminiResponse = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    if (!geminiResponse.ok) {
+        const errorBody = await geminiResponse.text();
+        console.error("Gemini API Error:", errorBody);
+        return res.status(geminiResponse.status).json({ error: `Failed to fetch from Gemini API: ${errorBody}` });
+    }
+    
+    const data = await geminiResponse.json();
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    
+    if (!text) {
+        return res.status(500).json({ error: "Received an empty or invalid response from the AI." });
     }
 
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+    // 5. Send the AI's response back to the frontend
+    res.status(200).json({ response: text });
 
-    const fullPrompt = `
-      You are an expert career coach and resume writer named "Coach Leo".
-      Your task is to generate a professional summary and key achievement bullet points for a resume.
-      You will be given the user's current profile/experience and a target job description.
-
-      Instructions:
-      1. Analyze both the user's profile and the job description.
-      2. Create a compelling, results-oriented "Professional Summary" of 2-4 sentences.
-      3. Create 3-5 "Key Achievement" bullet points that highlight the user's skills and align with the job requirements. Quantify achievements where possible.
-      4. Provide a short "Optimization Notes" section with 1-2 sentences on how to further tailor the resume for Applicant Tracking Systems (ATS).
-      5. Format the output clearly with headings for each section (Professional Summary, Key Achievements, Optimization Notes). Do not add any extra conversation or introductory text.
-
-      User Profile:
-      ---
-      ${profile}
-      ---
-
-      Target Job Description:
-      ---
-      ${job}
-      ---
-    `;
-
-    const result = await model.generateContent(fullPrompt);
-    const response = await result.response;
-    const text = response.text();
-
-    res.json({ text: text, provider: "gemini" });
-  } catch (error) {
-    console.error("Error calling Gemini API:", error);
-    res.status(500).json({ error: "Failed to generate response from AI." });
+  } catch (err: any) {
+    console.error("Server Error while calling Gemini API:", err);
+    res.status(500).json({ error: "Internal server error: " + err.message });
   }
 };
