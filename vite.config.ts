@@ -16,7 +16,7 @@ function expressDevServer(): Plugin {
   }
 }
 
-export default defineConfig(({ command, mode }) => {
+export default defineConfig(({ command }) => {
   const isDev = command === 'serve'
 
   return {
@@ -24,19 +24,20 @@ export default defineConfig(({ command, mode }) => {
       react(),
       isDev && expressDevServer(),
     ],
-    build: {
-      outDir: 'dist/spa',
-    },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './client'),
         '@shared': path.resolve(__dirname, './shared'),
       },
     },
-    // Explicitly set the entry point for the application
+    build: {
+      outDir: 'dist/spa',   // Netlify publish folder
+      emptyOutDir: true,    // Clear old builds
+      base: './',           // Use relative paths for assets
+    },
     server: isDev
       ? {
-          port: 8080, // Local dev port
+          port: 8080,       // Local dev server
         }
       : undefined,
   }
