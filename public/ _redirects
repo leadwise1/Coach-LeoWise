@@ -1,0 +1,5 @@
+This is a "splat" rule. It tells Netlify how to handle routing for a single-page app.
+For any path that doesn't match a real file, serve the main index.html file.
+The '200' status means "OK," telling the browser to stay on the current URL
+and let the JavaScript handle the routing.
+/* /index.html   200
