@@ -1,31 +1,27 @@
+# Netlify build and deploy settings for Vite + React SPA
+
 [build]
-  # Directory to publish (must contain index.html)
-  publish = "dist"
-  # Command to run the build
-  command = "pnpm build"
-  # Directory for Netlify serverless functions
+  command = "pnpm install && pnpm build:client"
+  publish = "dist/spa"
   functions = "netlify/functions"
 
 [build.environment]
   NODE_VERSION = "20"
-  GEMINI_API_KEY = "${GEMINI_API_KEY}"
-
-[functions]
-  # Use esbuild for bundling serverless functions
-  node_bundler = "esbuild"
+  NETLIFY_USE_YARN = "false"
+  NETLIFY_USE_PNPM = "true"
 
 [dev]
-  targetPort = 8080
   framework = "vite"
+  port = 8080
+  targetPort = 8080
 
+# Serverless API route
 [[redirects]]
-  # Redirect API calls to Netlify Functions
   from = "/api/*"
   to = "/.netlify/functions/api/:splat"
   status = 200
-  force = true
 
-# SPA fallback to support client-side routing
+# SPA routing
 [[redirects]]
   from = "/*"
   to = "/index.html"
