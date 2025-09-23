@@ -1,39 +1,35 @@
-import { defineConfig, Plugin } from "vite";
+import { defineConfig, UserConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
-import { createServer } from "./server";
 
-// https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
-  server: {
-    host: "::",
-    port: 8080,
-    fs: {
-      allow: ["./client", "./shared"],
-      deny: [".env", ".env.*", "*.{crt,pem}", "**/.git/**", "server/**"],
-    },
-  },
-  build: {
-    outDir: "dist/spa",
-  },
-  plugins: [react(), expressPlugin()],
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./client"),
-      "@shared": path.resolve(__dirname, "./shared"),
-    },
-  },
-}));
+export default defineConfig(({ mode }): UserConfig => {
+  if (mode !== "production") {
+    require("dotenv").config();
+  }
 
-function expressPlugin(): Plugin {
   return {
-    name: "express-plugin",
-    apply: "serve", // Only apply during development (serve mode)
-    configureServer(server) {
-      const app = createServer();
-
-      // Add Express app as middleware to Vite dev server
-      server.middlewares.use(app);
+    server: {
+      host: "::",
+      port: 8080,
+      fs: {
+        allow: ["./client", "./shared"],
+        deny: [".env", ".env.*", "*.{crt,pem}", "**/.git/**", "server/**"],
+      },
+    },
+    build: {
+      outDir: "dist/spa",
+      sourcemap: mode !== "production",
+    },
+    plugins: [react()],
+    resolve: {
+      alias: {
+        "@": path.resolve(__dirname, "./client"),
+        "@shared": path.resolve(__dirname, "./shared"),
+      },
+    },
+    define: {
+      __BUILD_KEY__: JSON.stringify(process.env.VITE_PUBLIC_BUILDER_KEY),
+      __PING_MESSAGE__: JSON.stringify(process.env.VITE_PING_MESSAGE),
     },
   };
-}
+});
