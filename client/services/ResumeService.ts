@@ -7,11 +7,3 @@ export const resumeService = {
     return { success: true, data, templateId, text: "AI generated resume text" };
   }
 };
-// client/services/ResumeService.ts
-export class ResumeService {
-  // ... other methods
-
-  someMethod() {
-    return { success: true, data: {}, templateId: '1', text: "AI generated resume text" };
-  }
-}

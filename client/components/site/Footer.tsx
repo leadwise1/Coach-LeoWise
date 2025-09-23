@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 export default function Footer() {
   return (
@@ -18,7 +18,7 @@ export default function Footer() {
           <ul className="space-y-2 text-sm text-muted-foreground">
             <li><a href="#features" className="hover:text-foreground" aria-label="Resume Builder section">Resume Builder</a></li>
             <li><a href="#dashboard" className="hover:text-foreground" aria-label="Career Dashboard section">Career Dashboard</a></li>
-            <li><Link to="/templates" className="hover:text-foreground" aria-label="Templates page">Templates</Link></li>
+            <li><Link href="/templates" className="hover:text-foreground" aria-label="Templates page">Templates</Link></li>
             <li><a href="#coaching" className="hover:text-foreground" aria-label="Interview Prep section">Interview Prep</a></li>
           </ul>
         </nav>

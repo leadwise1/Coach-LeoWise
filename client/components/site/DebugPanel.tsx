@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, type FC } from 'react';
 
-export const DebugPanel: React.FC = () => {
+export const DebugPanel: FC = () => {
   const [apiStatus, setApiStatus] = useState<'checking' | 'connected' | 'error'>('checking');
   const [errorDetails, setErrorDetails] = useState<string>('');
   const [showDebug, setShowDebug] = useState<boolean>(false);
@@ -60,7 +60,7 @@ export const DebugPanel: React.FC = () => {
       
       <div className="text-sm">
         <p>
-          <span className="font-medium">Environment:</span> {import.meta.env.PROD ? 'Production' : 'Development'}
+          <span className="font-medium">Environment:</span> {process.env.NODE_ENV === 'production' ? 'Production' : 'Development'}
         </p>
         <p>
           <span className="font-medium">API Status:</span>{' '}
