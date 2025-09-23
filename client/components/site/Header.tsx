@@ -18,25 +18,25 @@ import { Button } from '../ui/button';
           className="hidden md:flex items-center gap-6"
         >
           <a
-            href="#features"
+            href="/#features"
             className="text-sm text-foreground/70 hover:text-foreground"
           >
             Features
           </a>
           <a
-            href="#coaching"
+            href="/#coaching"
             className="text-sm text-foreground/70 hover:text-foreground"
           >
             Coaching
           </a>
           <a
-            href="#dashboard"
+            href="/#dashboard"
             className="text-sm text-foreground/70 hover:text-foreground"
           >
             Dashboard
           </a>
           <a
-            href="#pricing"
+            href="/#pricing"
             className="text-sm text-foreground/70 hover:text-foreground"
           >
             Pricing
@@ -53,7 +53,7 @@ import { Button } from '../ui/button';
             <Link href="/templates">View Templates</Link>
           </Button>
           <Button className="bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 hover:from-indigo-500 hover:via-violet-500 hover:to-fuchsia-500">
-            <a href="#get-started">Start Free Trial</a>
+            <a href="/#get-started">Start Free Trial</a>
           </Button>
         </div>
       </div>
