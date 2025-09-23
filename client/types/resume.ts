@@ -1,8 +1,8 @@
 export interface Resume {
-  personalInfo: {
-    name: string;
-    email: string;
-    phone: string;
+  personalInfo?: {
+    name?: string;
+    email?: string;
+    phone?: string;
     location?: string;
     linkedin?: string;
     website?: string;
@@ -27,3 +27,5 @@ export interface Resume {
   achievements?: string[];
   customizations?: Record<string, any>;
 }
+
+export type ResumeData = Resume;

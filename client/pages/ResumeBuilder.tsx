@@ -89,8 +89,11 @@ export default function ResumeBuilder() {
       experience: sections.experience
         ? sections.experience.split("\n").map(line => ({ description: line }))
         : undefined,
-      education: sections.education
-        ? sections.education.split("\n").map(line => ({ degree: line }))
+        education: sections.education
+        ? sections.education.split("\n").map(line => ({
+            degree: line,
+            institution: "Unknown",
+          }))
         : undefined,
       skills: sections.skills ? sections.skills.split("\n") : undefined,
       projects: sections.projects ? sections.projects.split("\n") : undefined,

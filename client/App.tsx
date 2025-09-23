@@ -1,12 +1,19 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { DebugPanel } from './components/site/DebugPanel';
+import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
+
+// Correctly import the named export 'DebugPanel' from its module
+const DebugPanel = dynamic(
+  () => import('./components/site/DebugPanel').then((mod) => mod.DebugPanel),
+  { ssr: false }
+);
 
 const Index = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const handleGenerateResume = () => {
-    navigate('/resume');
+    // Use Next.js router for client-side navigation without a full page reload
+    router.push('/resume');
   };
 
   return (
@@ -19,11 +26,12 @@ const Index = () => {
       >
         Generate My Resume
       </button>
-      
-      {/* Debug panel will only be visible in production and can be toggled */}
+
       <DebugPanel />
     </div>
   );
 };
 
+// This component should be the default export if it's a page.
+// The BrowserRouter wrapper is removed to fix the server-side rendering error.
 export default Index;
