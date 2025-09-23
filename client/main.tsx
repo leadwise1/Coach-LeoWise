@@ -15,7 +15,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Route path="/" element={<App />} />
         <Route path="/resume" element={<ResumeBuilder />} />
         <Route path="/templates" element={<Templates />} />
-        <Route path="/placeholder" element={<Placeholder />} />
+        <Route path="/placeholder" element={<Placeholder title={''} />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
