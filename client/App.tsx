@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic';
 import Layout from './components/site/Layout';
-import { Hero } from './components/site/Hero';
+import LandingPageContent from './pages/Index';
 
 // Correctly import the named export 'DebugPanel' from its module
 const DebugPanel = dynamic(
@@ -10,8 +10,7 @@ const DebugPanel = dynamic(
 const Index = () => {
   return (
     <Layout>
-      <Hero />
-      {/* You can add other page sections here */}
+      <LandingPageContent />
       <DebugPanel />
     </Layout>
   );

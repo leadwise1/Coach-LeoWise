@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import VideoCoach from "@/components/site/VideoCoach";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 function SectionTitle({
   eyebrow,
@@ -231,7 +231,7 @@ export default function Index() {
                   <a href="#ai">Start Building Resume</a>
                 </Button>
                 <Button size="lg" variant="outline" asChild>
-                  <Link to="/templates">View Templates</Link>
+                  <Link href="/templates">View Templates</Link>
                 </Button>
               </div>
               <TypingLine />
