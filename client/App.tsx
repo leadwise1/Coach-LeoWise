@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { DebugPanel } from './components/site/DebugPanel';
 
 const Index = () => {
   const navigate = useNavigate();
@@ -18,6 +19,9 @@ const Index = () => {
       >
         Generate My Resume
       </button>
+      
+      {/* Debug panel will only be visible in production and can be toggled */}
+      <DebugPanel />
     </div>
   );
 };
