@@ -1,4 +1,4 @@
-import Layout from '../client/components/site/Layout';
+import React from 'react';
 import TemplatesPage from '../client/pages/Templates';
 
 /**
@@ -6,11 +6,7 @@ import TemplatesPage from '../client/pages/Templates';
  * It imports the original Templates component and wraps it in the site Layout.
  */
 const Templates = () => {
-  return (
-    <Layout>
-      <TemplatesPage />
-    </Layout>
-  );
+  return <TemplatesPage />;
 };
 
 export default Templates;

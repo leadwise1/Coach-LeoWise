@@ -19,31 +19,31 @@ import { Button } from '../ui/button';
         >
           <a
             href="/#features"
-            className="text-sm text-foreground/70 hover:text-foreground"
+            className="text-sm text-foreground/80 hover:text-foreground"
           >
             Features
           </a>
           <a
             href="/#coaching"
-            className="text-sm text-foreground/70 hover:text-foreground"
+            className="text-sm text-foreground/80 hover:text-foreground"
           >
             Coaching
           </a>
           <a
             href="/#dashboard"
-            className="text-sm text-foreground/70 hover:text-foreground"
+            className="text-sm text-foreground/80 hover:text-foreground"
           >
             Dashboard
           </a>
           <a
             href="/#pricing"
-            className="text-sm text-foreground/70 hover:text-foreground"
+            className="text-sm text-foreground/80 hover:text-foreground"
           >
             Pricing
           </a>
           <Link
             href="/templates"
-            className="text-sm text-foreground/70 hover:text-foreground"
+            className="text-sm text-foreground/80 hover:text-foreground"
           >
             Templates
           </Link>

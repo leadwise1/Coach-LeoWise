@@ -2,7 +2,7 @@
 import { drizzle } from 'drizzle-orm/neon-http';
 import { Client } from '@neondatabase/serverless';
 import * as schema from './schema';
-import { resumes } from './schema';
+import { resumes } from './schema'; // Assuming 'resumes' is exported from schema.ts
 
 // Define your ResumeData type
 export interface ResumeData {

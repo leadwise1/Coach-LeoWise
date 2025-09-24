@@ -1,7 +1,7 @@
 // pages/index.tsx
 import dynamic from 'next/dynamic';
-import Layout from '../client/components/site/Layout';
 import LandingPageContent from '../client/pages/Index';
+import React from 'react';
 
 // Correctly import the named export 'DebugPanel' from its module
 const DebugPanel = dynamic(
@@ -11,10 +11,10 @@ const DebugPanel = dynamic(
 
 const HomePage = () => {
   return (
-    <Layout>
+    <>
       <LandingPageContent />
       <DebugPanel />
-    </Layout>
+    </>
   );
 };
 

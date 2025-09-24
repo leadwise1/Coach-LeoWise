@@ -9,12 +9,15 @@ import {
   Sparkles,
   BookOpenCheck,
   Target,
+  Copy,
+  Check,
   BarChart3,
   Layers,
   ShieldCheck,
   CalendarClock,
   CheckCircle2,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import VideoCoach from "@/components/site/VideoCoach";
 import Link from "next/link";
@@ -46,7 +49,7 @@ function Feature({
   title,
   desc,
 }: {
-  icon: any;
+  icon: LucideIcon;
   title: string;
   desc: string;
 }) {
@@ -155,50 +158,65 @@ export default function Index() {
   const [generated, setGenerated] = useState<string | null>(null);
   const [provider, setProvider] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const ideas = useResumeGenerator(profile, job);
 
   const onGenerate = async () => {
+    const generateLocalFallback = () => {
+      const out = [
+        `Professional Summary\n${ideas.summary}`,
+        `Key Achievements\n• ${ideas.bullets.join("\n• ")}`,
+        `Optimization Notes\n${ideas.tailored}`,
+      ].join("\n\n");
+      setGenerated(out);
+      setProvider("local");
+    };
+
     try {
       setLoading(true);
       setGenerated(null);
       setProvider(null);
-      const res = await fetch("/api/generate", {
+      const fetchOptions = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          profile,
-          job,
-          temperature: 0.6,
-          maxTokens: 1200,
-        }),
-      });
-      if (res.ok) {
+        body: JSON.stringify({ profile, job, temperature: 0.6, maxTokens: 1200 }),
+      };
+
+      let res = null;
+      for (const path of ["/api/generate", "/.netlify/functions/api/generate"]) {
+        res = await fetch(path, fetchOptions).catch(() => null);
+        if (res?.ok) break;
+      }
+
+      if (res && res.ok) {
         const data = (await res.json()) as { provider?: string; text?: string };
         if (data?.text) {
           setGenerated(data.text);
           setProvider(data.provider || null);
           return;
         }
+      } else if (res) {
+        // The API call failed. Log the error for debugging on the client side.
+        // The local fallback will still be used below.
+        const errorText = await res.text();
+        console.error(`API call failed with status ${res.status}:`, errorText);
       }
       // Fallback to local generator
-      const out = [
-        `Professional Summary\n${ideas.summary}`,
-        `Key Achievements\n• ${ideas.bullets.join("\n• ")}`,
-        `Optimization Notes\n${ideas.tailored}`,
-      ].join("\n\n");
-      setGenerated(out);
-      setProvider("local");
+      generateLocalFallback();
     } catch (e) {
-      const out = [
-        `Professional Summary\n${ideas.summary}`,
-        `Key Achievements\n• ${ideas.bullets.join("\n• ")}`,
-        `Optimization Notes\n${ideas.tailored}`,
-      ].join("\n\n");
-      setGenerated(out);
-      setProvider("local");
+      console.error("Failed to generate resume:", e);
+      generateLocalFallback();
     } finally {
       setLoading(false);
+    }
+  };
+
+  const onCopy = () => {
+    if (generated) {
+      navigator.clipboard.writeText(generated);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
     }
   };
 
@@ -360,7 +378,20 @@ export default function Index() {
             </div>
             <div className="lg:col-span-1">
               <div className="h-full rounded-xl border bg-card p-4">
-                <div className="text-sm font-semibold">Generated Result</div>
+                <div className="flex items-center justify-between">
+                  <div className="text-sm font-semibold">Generated Result</div>
+                  {generated && (
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={onCopy}
+                      className="text-xs"
+                    >
+                      {copied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
+                      <span className="ml-1">{copied ? "Copied!" : "Copy"}</span>
+                    </Button>
+                  )}
+                </div>
                 <pre className="mt-3 h-[360px] w-full overflow-auto rounded-md bg-muted/40 p-3 text-xs leading-6">
                   {generated || "Your personalized resume will appear here..."}
                 </pre>

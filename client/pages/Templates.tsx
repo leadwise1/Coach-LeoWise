@@ -71,6 +71,7 @@ export default function Templates() {
               <Button
                 onClick={() => choose(t.id)}
                 variant={selected === t.id ? "default" : "outline"}
+                aria-pressed={selected === t.id}
               >
                 {selected === t.id ? "Selected" : "Select"}
               </Button>

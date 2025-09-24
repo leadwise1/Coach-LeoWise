@@ -1,28 +1,24 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
 # Dependencies
 /node_modules
 /.pnpm
-.pnpm-store
+pnpm-lock.yaml
 
-# Build outputs
+# Next.js build output
 /.next/
 /out/
-/build/
 
-# Miscellaneous
+# Production
+/build
+
+# Local Environment Variables
+.env
+.env.local
+
+# Misc
 .DS_Store
 *.pem
 
-# Debug logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-
-# Local environment files
-.env*.local
-.env
-
-# Next.js generated
-next-env.d.ts
+# Unwanted public assets
+public/1.jpg
+public/favicon 2.ico/
+public/favicon.ico.zip
