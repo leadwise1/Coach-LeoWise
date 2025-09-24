@@ -1,8 +1,8 @@
-import React from "react";
+import type { ReactNode } from "react";
 import { Header } from "./Header";
 import Footer from "./Footer";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
@@ -12,4 +12,4 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <Footer />
     </div>
   );
-}
+} 

@@ -254,7 +254,7 @@ export default function Index() {
               </div>
             </div>
             <div className="relative">
-              <VideoCoach src="/hero-video.mp4" />
+              <VideoCoach src="https://cdn.builder.io/o/assets%2F97052129558d481882bb7b8a999ce5cc%2F935029fd0d3741f98defc2a32ba7c24f?alt=media&token=1bced179-5c5b-4cce-8e10-6d4b38d4f584&apiKey=97052129558d481882bb7b8a999ce5cc" />
             </div>
           </div>
         </div>
