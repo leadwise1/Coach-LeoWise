@@ -1,8 +1,21 @@
 // pages/index.tsx
-import IndexPage from '../client/App';
+import dynamic from 'next/dynamic';
+import Layout from '../client/components/site/Layout';
+import LandingPageContent from '../client/pages/Index';
 
-/**
- * This file is the entry point for the Next.js page at the route "/".
- * It should simply import and export the actual page component.
- */
-export default IndexPage;
+// Correctly import the named export 'DebugPanel' from its module
+const DebugPanel = dynamic(
+  () => import('../client/components/site/DebugPanel').then((mod) => mod.DebugPanel),
+  { ssr: false }
+);
+
+const HomePage = () => {
+  return (
+    <Layout>
+      <LandingPageContent />
+      <DebugPanel />
+    </Layout>
+  );
+};
+
+export default HomePage;

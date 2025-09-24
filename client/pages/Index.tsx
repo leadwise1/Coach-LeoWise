@@ -215,12 +215,11 @@ export default function Index() {
                 Build Your Career Foundation with AI-Powered Resumes
               </div>
               <h1 className="mt-4 text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
-                LeadWise Foundation empowers job seekers with professional,
+                 Unlock Your Career Potential with Coach LeoWise: AI-Powered Career Coaching for the Modern Professional
                 ATS-friendly resumes.
               </h1>
               <p className="mt-4 text-lg text-muted-foreground">
-                Our AI-powered platform helps you craft compelling content that
-                showcases your potential and opens doors to new opportunities.
+              Revolutionize your job search and career growth with personalized AI guidance and expert human support.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Button
@@ -254,7 +253,7 @@ export default function Index() {
               </div>
             </div>
             <div className="relative">
-              <VideoCoach src="https://cdn.builder.io/o/assets%2F97052129558d481882bb7b8a999ce5cc%2F935029fd0d3741f98defc2a32ba7c24f?alt=media&token=1bced179-5c5b-4cce-8e10-6d4b38d4f584&apiKey=97052129558d481882bb7b8a999ce5cc" />
+              <VideoCoach src="/hero-video.mp4" />
             </div>
           </div>
         </div>
