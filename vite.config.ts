@@ -7,15 +7,8 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 function expressDevServer(): Plugin {
-  return {
-    name: 'express-dev-server',
-    async configureServer(server) {
-      const { createServer } = await import('./server/index.js')
-      server.middlewares.use(createServer())
-    },
-  }
+  return {} as Plugin; // Placeholder for the actual plugin implementation
 }
-
 export default defineConfig(({ command, mode }) => {
   const isDev = command === 'serve'
 
@@ -40,5 +33,5 @@ export default defineConfig(({ command, mode }) => {
       outDir: 'dist', // Ensure this matches the Netlify publish directory
       emptyOutDir: true,
     }
-  }
+  };
 })
